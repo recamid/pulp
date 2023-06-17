@@ -1,0 +1,25 @@
+from pulp import *
+
+# Crea un problema de maximización lineal
+problema = LpProblem("Maximización de producción de escúter", LpMaximize)
+
+# Define las variables de decisión
+x = LpVariable("x", lowBound=0, cat='Integer')  # Número de escúter del modelo A
+y = LpVariable("y", lowBound=0, cat='Integer')  # Número de escúter del modelo base
+
+# Define la función objetivo
+problema += x + y, "Maximizar producción de escúter"
+
+# Define las restricciones
+problema += 2*x + 4*y <= 238, "Restricción de acero"
+problema += 3*x + 2*y <= 293, "Restricción de aluminio"
+
+# Resuelve el problema
+problema.solve()
+
+# Imprime el estado de la solución
+print("Estado de la solución:", LpStatus[problema.status])
+
+# Imprime la cantidad óptima de escúter a fabricar
+print("Cantidad óptima de escúter del modelo A a fabricar:", value(x))
+print("Cantidad óptima de escúter del modelo base a fabricar:", value(y))
